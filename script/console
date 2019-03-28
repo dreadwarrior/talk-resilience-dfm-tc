@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# script/console: Launch a console for the application. Optionally allow an
+#                 environment to be passed in to let the script handle the
+#                 specific requirements for connecting to a console for that
+#                 environment.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if [ -n "$1" ]; then
+    if [ "$1" = "run" ]; then
+        shift
+        docker run \
+            --rm \
+            --volume "$(pwd)":/app \
+            --workdir /app \
+            --entrypoint /usr/local/bin/entrypoint-suexec.sh \
+            dreadlabs/php-lib:7.3-dev \
+            "$@"
+    else
+        echo "==> Sorry, I don't known how to connect to the '$1' environment."
+        exit 1
+    fi
+else
+    # no argument provided, so just run the local console in the development
+    # environment. Ensure the application is up to date first.
+    script/update
+    docker run \
+        --interactive \
+        --tty \
+        --rm \
+        --volume dreadlabs-talk-resilience-dfm-tc_composer-cache:/var/cache/composer \
+        --volume "$(pwd)":/app \
+        --workdir /app \
+        --entrypoint /usr/local/bin/entrypoint-suexec.sh \
+        dreadlabs/php-lib:7.3-dev \
+        /bin/bash
+fi

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# script/bootstrap: Resolve all dependencies that the application requires to
+#                   run.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+docker volume inspect dreadlabs-talk-resilience-dfm-tc_composer-cache 1>/dev/null 2>&1 || {
+    docker volume create dreadlabs-talk-resilience-dfm-tc_composer-cache;
+}
+
+if [ -f composer.json ]; then
+    docker run \
+        --rm \
+        --volume dreadlabs-talk-resilience-dfm-tc_composer-cache:/var/cache/composer \
+        --volume "$(pwd)":/app \
+        --workdir /app \
+        --entrypoint /usr/local/bin/entrypoint-suexec.sh \
+        dreadlabs/php-lib:7.3-dev \
+        composer install --prefer-dist --optimize-autoloader --no-ansi --no-interaction
+else
+    echo "==> No composer.json found in root directory."
+    exit 1
+fi

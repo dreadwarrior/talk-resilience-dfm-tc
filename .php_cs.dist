@@ -1,0 +1,54 @@
+<?php
+declare(strict_types=1);
+
+/*
+ * This file is part of the `dreadwarrior/talk-resilience-dfm-tc` project.
+ *
+ * (c) 2019 Thomas Juhnke <contact@dreadlabs.de>
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
+$header = <<<EOF
+This file is part of the `dreadwarrior/talk-resilience-dfm-tc` project.
+
+(c) 2019 Thomas Juhnke <contact@dreadlabs.de>
+
+For the full copyright and license information, please view the LICENSE.md
+file that was distributed with this source code.
+EOF;
+
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules([
+        '@Symfony' => false,
+        '@Symfony:risky' => false,
+        'array_syntax' => ['syntax' => 'short'],
+        'combine_consecutive_unsets' => true,
+        'declare_strict_types' => true,
+        // one should use PHPUnit methods to set up expected exception instead of annotations
+        'general_phpdoc_annotation_remove' => ['expectedException', 'expectedExceptionMessage', 'expectedExceptionMessageRegExp'],
+        'header_comment' => ['header' => $header],
+        'heredoc_to_nowdoc' => true,
+        'linebreak_after_opening_tag' => true,
+        'no_extra_consecutive_blank_lines' => ['break', 'continue', 'extra', 'return', 'throw', 'use', 'parenthesis_brace_block', 'square_brace_block', 'curly_brace_block'],
+        'no_unreachable_default_argument_value' => true,
+        'no_useless_else' => true,
+        'no_useless_return' => true,
+        'ordered_class_elements' => true,
+        'ordered_imports' => true,
+        'php_unit_strict' => true,
+        'phpdoc_add_missing_param_annotation' => true,
+        'phpdoc_order' => true,
+        'psr4' => true,
+        'return_type_declaration' => ['space_before' => 'none'],
+        'strict_comparison' => true,
+        'strict_param' => true,
+    ])
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->exclude('build')
+            ->exclude('tests/Fixtures')
+            ->in(__DIR__)
+    );

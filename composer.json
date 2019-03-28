@@ -1,0 +1,40 @@
+{
+    "name": "dreadlabs/talk-resilience-dfm-tc",
+    "description": "Talk: Resilience Testing with Docker for Mac & `tc`",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Juhnke",
+            "email": "contact@dreadlabs.de"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "predis/predis": "^1.1",
+        "symfony/http-foundation": "^4.3"
+    },
+    "replace": {
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "DreadLabs\\ResilienceTalk\\": "apps/resilience-talk/src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+        }
+    },
+    "scripts": {
+        "fix:codestyle:dry": [
+            "php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation"
+        ],
+        "fix:codestyle": [
+            "php-cs-fixer fix --config=.php_cs.dist -v"
+        ]
+    }
+}
