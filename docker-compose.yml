@@ -1,5 +1,8 @@
 version: '3.7'
 
+networks:
+  slownet:
+
 services:
   app:
     image: dreadlabs/php-lib:7.3-dev
@@ -12,6 +15,10 @@ services:
 
   redis:
     image: redis:5.0
+    networks:
+      - slownet
+    ports:
+      - 6379:6379
 
   http-echo:
     image: mendhak/http-https-echo

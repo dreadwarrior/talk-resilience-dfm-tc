@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 $app = new Application(
-    new RedisClient('tcp://redis:6379?timeout=1&read_write_timeout=1'),
+    new RedisClient('tcp://host.docker.internal:6379?timeout=1&read_write_timeout=1'),
     new HttpClient(['base_uri' => 'http://http-echo', 'connect_timeout' => 1, 'timeout' => 1])
 );
 
