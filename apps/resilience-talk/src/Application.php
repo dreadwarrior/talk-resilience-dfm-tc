@@ -14,6 +14,7 @@ namespace DreadLabs\ResilienceTalk;
 
 use GuzzleHttp\ClientInterface as HttpClientInterface;
 use Predis\ClientInterface as RedisClientInterface;
+use Predis\Connection\ConnectionException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 final class Application
@@ -48,11 +49,19 @@ final class Application
 
     private function runRedis(): void
     {
-        printf('Sequence before: %u%s', (int)$this->redisClient->get('sequence'), chr(10));
+        try {
+            printf('Sequence before: %u%s', (int)$this->redisClient->get('sequence'), chr(10));
 
-        $this->redisClient->incr('sequence');
+            $this->redisClient->incr('sequence');
 
-        printf('Sequence after: %u%s', (int)$this->redisClient->get('sequence'), chr(10));
+            printf('Sequence after: %u%s', (int)$this->redisClient->get('sequence'), chr(10));
+        } catch (ConnectionException $e) {
+            if ($e->getCode() === 110) {
+                error_log('Can\'t connect to Redis.');
+            } else {
+                error_log($e->getMessage());
+            }
+        }
     }
 
     private function runSeparator(): void
